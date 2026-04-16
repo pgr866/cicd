@@ -17,11 +17,11 @@ jobs:
     steps:
       - name: Install git and rsync 📚
         run: apk update && apk add git rsync
-        
-      - uses: actions/checkout@v4
-      
+
       - name: Fix Git Safe Directory
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+        
+      - uses: actions/checkout@v6.0.2
 
       - name: Install dependencies 
         run: npm install
@@ -33,13 +33,13 @@ jobs:
           npx antora local-antora-playbook.yml --fetch
           
       - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.1
         with:
           name: docs 
           path: docs/
 
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
+        uses: JamesIves/github-pages-deploy-action@v4.8.0
         if: github.ref == 'refs/heads/main'
         with:
           branch: gh-pages
@@ -47,7 +47,7 @@ jobs:
           clean: true
 
       - name: Release
-        uses: svenstaro/upload-release-action@v2
+        uses: svenstaro/upload-release-action@2.11.5
         if: contains(github.ref, 'refs/tags/')
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
